@@ -10,11 +10,13 @@ const Verify = () => {
     const [searchParams,setSearchParams]=useSearchParams();
     const success=searchParams.get("success");
     const orderId=searchParams.get("orderId");
-    const {url}=useContext(StoreContext);
+    const {url, setCartItems}=useContext(StoreContext);
     const navigate=useNavigate();
     const verifyPayment=async()=>{
         const responce=await axios.post(`${url}/api/order/verify`,{success,orderId},{headers:{token:localStorage.getItem("token")}});
         if(responce.data.success){
+            // Clear local cart state after successful payment
+            setCartItems({});
             navigate("/myOrders");
         }
         else{

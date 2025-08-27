@@ -18,7 +18,8 @@ const placeOrder=async(req,res)=>{
             address:req.body.address,
         })
         await newOrder.save();
-        await userModel.findByIdAndUpdate(req.body.userId,{cartData:{}});
+        // Clear the authenticated user's cart after placing the order
+        await userModel.findByIdAndUpdate(req.userId, { cartData: {} });
 
         const line_items=req.body.items.map((item)=>({
             price_data:{
